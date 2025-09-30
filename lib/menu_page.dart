@@ -13,26 +13,47 @@ List<MenuStore> menuStores = [
   MenuStore(
     name: 'Nasi Goreng',
     price: 15000,
-    image: 'assets/images/food1.jpg',
+    image: 'assets/images/nasigoreng.jpg',
   ),
-  MenuStore(name: 'Mie Ayam', price: 12000, image: 'assets/images/food2.jpg'),
-  MenuStore(name: 'Sate Ayam', price: 20000, image: 'assets/images/food3.jpg'),
-  MenuStore(name: 'Bakso', price: 10000, image: 'assets/images/food4.jpg'),
-  MenuStore(name: 'Gado-Gado', price: 14000, image: 'assets/images/food5.jpg'),
-  MenuStore(name: 'Rendang', price: 25000, image: 'assets/images/food6.jpg'),
-  MenuStore(name: 'Ayam Bakar', price: 22000, image: 'assets/images/food7.jpg'),
-  MenuStore(name: 'Soto Ayam', price: 16000, image: 'assets/images/food8.jpg'),
-  MenuStore(name: 'Nasi Uduk', price: 15000, image: 'assets/images/food9.jpg'),
+  MenuStore(name: 'Mie Ayam', price: 12000, image: 'assets/images/mieayam.jpg'),
+  MenuStore(
+    name: 'Sate Ayam',
+    price: 20000,
+    image: 'assets/images/sateayam.jpg',
+  ),
+  MenuStore(name: 'Bakso', price: 10000, image: 'assets/images/bakso.jpg'),
+  MenuStore(
+    name: 'Gado-Gado',
+    price: 14000,
+    image: 'assets/images/gadogado.jpg',
+  ),
+  MenuStore(name: 'Rendang', price: 25000, image: 'assets/images/rendang.jpg'),
+  MenuStore(
+    name: 'Ayam Bakar',
+    price: 22000,
+    image: 'assets/images/ayambakar.jpg',
+  ),
+  MenuStore(
+    name: 'Soto Ayam',
+    price: 16000,
+    image: 'assets/images/sotoayam.jpg',
+  ),
+  MenuStore(
+    name: 'Nasi Uduk',
+    price: 15000,
+    image: 'assets/images/nasiuduk.jpg',
+  ),
   MenuStore(
     name: 'Pecel Lele',
     price: 18000,
-    image: 'assets/images/food10.jpg',
+    image: 'assets/images/pecellele.jpg',
   ),
 ];
 
 class MenuPage extends StatelessWidget {
   final String username;
   const MenuPage({super.key, required this.username});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,29 +70,43 @@ class MenuPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 2 kolom
-            childAspectRatio: 0.8, // proporsi tinggi-lebar card
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
+      body: CustomScrollView(
+  slivers: [
+    // Banner di atas (tidak ikut scroll bareng grid)
+    SliverToBoxAdapter(
+      child: Container(
+        margin: const EdgeInsets.all(12),
+        height: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: const DecorationImage(
+            image: AssetImage('assets/images/background.jpg'),
+            fit: BoxFit.cover,
           ),
-          itemCount: menuStores.length,
-          itemBuilder: (context, index) {
+        ),
+      ),
+    
+    ),
+    // Grid menu
+    SliverPadding(
+      padding: const EdgeInsets.all(12),
+      sliver: SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
             final menu = menuStores[index];
             return Card(
+              key: ValueKey(menu.name), // penting biar gak duplikat child
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              clipBehavior: Clip.antiAlias, // supaya gambar ikut rounded
+              clipBehavior: Clip.antiAlias,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(child: Image.asset(menu.image, fit: BoxFit.cover)),
-
+                  Expanded(
+                    child: Image.asset(menu.image, fit: BoxFit.cover),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -89,8 +124,6 @@ class MenuPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // Tombol Pesan
                   SizedBox(
                     height: 40,
                     child: ElevatedButton(
@@ -111,18 +144,26 @@ class MenuPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: const Text(
-                        "Pesan",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: const Text("Pesan"),
                     ),
                   ),
                 ],
               ),
             );
           },
+          childCount: menuStores.length,
+        ),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 0.8,
         ),
       ),
+    ),
+  ],
+),
+
     );
   }
 }
